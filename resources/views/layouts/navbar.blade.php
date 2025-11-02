@@ -45,21 +45,21 @@
                         </li>
 
                         {{-- customer --}}
-                        {{-- <li class="sidebar-item  has-sub">
+                        <li class="sidebar-item  has-sub">
                             <a href="#" class="sidebar-link">
                                 <i class="bi bi-person-badge-fill"></i>
                                 <span>Customer</span>
                             </a>
                             <ul class="submenu" >
                                 <li class="submenu-item ">
-                                    <a href="{{route('customer.list')}}">Customer List</a>
+                                    <a href="">Customer List</a>
                                 </li>
                                 <li class="submenu-item ">
-                                    <a href="{{route('customer.add.form')}}">Customer Add</a>
+                                    <a href="">Customer Add</a>
                                 </li>
                                 
                             </ul>
-                        </li> --}}
+                        </li>
 
                         
                         {{-- Employee --}}
