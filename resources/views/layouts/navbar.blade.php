@@ -47,6 +47,7 @@
                             <a href="#" class='sidebar-link'>
                                 <i class="bi bi-box-arrow-left"></i>
                                 <span>Employee</span>
+                                <span>Employee List</span>
                             </a>
                         </li>
                         {{-- customer --}}
