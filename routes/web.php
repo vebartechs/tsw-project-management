@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\dashboard\DashboardController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -16,9 +17,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Protected Routes ==============================
 Route::middleware(['auth'])->group(function () {
     // Dashboard
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 
 });

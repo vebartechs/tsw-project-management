@@ -1,0 +1,90 @@
+body {
+    background-image: url(../images/bg/milky-way.jpg);
+    background-position-x: 0px;
+    background-position-y: 0px;
+    background-size: initial;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-origin: initial;
+    background-clip: initial;
+    background-size: cover;
+    background-color: rgb(28, 138, 228);
+    height: 100%;
+
+    font-size: .9rem;
+    line-height: 1.3;
+}
+
+/* logo text */
+.logo-text{
+    color: #dc3545;
+    font-size: 28px;
+    font-family: 'Jost', sans-serif;
+    letter-spacing: .9px;
+}
+
+
+/* side bar logo size */
+.sidebar-wrapper .sidebar-header img {
+    height: 4.5rem;
+}
+
+/* Side bar bg color */
+.sidebar-wrapper {
+    background-color: #ffffffa1;
+    width: 280px;
+}
+
+/* Side bar menu custom background color */
+.sidebar-wrapper .menu .sidebar-item.active .sidebar-link {
+    background-color: #dc3545
+}
+
+
+/* flex use footer fix down ==================*/
+#main {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin-left: 280px;
+    padding: 1.5rem;
+}
+
+.card .card-body {
+    padding: 1rem;
+}
+
+
+footer{
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.body-content{
+    flex-grow: 1;
+}
+
+/* end */
+
+
+.footer-link{
+    color: #0027b3;
+}
+
+
+/* table padding */
+.table>:not(caption)>*>*{
+   padding:  0.4rem;
+}
+
+
+
+/* tost fontsize */
+.toast{
+    font-size: 1.1rem;
+}
+
+
+label {
+    font-size: 14px;
+  }
