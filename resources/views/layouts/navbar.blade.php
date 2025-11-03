@@ -2,9 +2,9 @@
             <div class="sidebar-wrapper active">
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between">
-                        <div class="logo text-center" >
+                        <div class="logo text-center">
                             {{-- <a href="{{url('/')}}"><img src="{{asset('assets/images/logo/new_logo.png')}}" alt="Logo" ></a> --}}
-                            <a href="{{url('/')}}" class="logo-text">The Sparkling Wedding</a>
+                            <a href="{{ url('/') }}" class="logo-text">The Sparkling Wedding</a>
                         </div>
                         <div class="toggler">
                             <a href="#" class="sidebar-hide d-xl-none d-block"><i
@@ -24,69 +24,56 @@
                             </a>
                         </li>
 
-                        
+
                         {{-- Project Nav --}}
                         <li class="sidebar-item has-sub">
                             <a href="#" class='sidebar-link'>
                                 <i class="bi bi-stack"></i>
                                 <span>Projects</span>
                             </a>
-                            {{-- <ul class="submenu " >
-                               
-                                <li class="submenu-item ">
-                                    <a href="{{route('customer.basic.form')}}">Create Project</a>
-                                </li>
-                                <li class="submenu-item  ">
-                                    <a href="/dashboard">Project List</a>
-                                </li>
-                               
-                                
-                            </ul> --}}
+                           
                         </li>
-                        <li class="sidebar-item ">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-box-arrow-left"></i>
+
+
+
+                        {{-- Employee Nav------------------ --}}
+                        <li class="sidebar-item has-sub">
+                            <a href="#" class="sidebar-link">
+                                <i class="bi bi-person-fill"></i>
                                 <span>Employee</span>
-                                <span>Employee List</span>
                             </a>
+                            <ul class="submenu">
+                                <li class="submenu-item">
+                                    <a href="{{route('employee.index')}}">Employee List</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a href="{{route('employee.create')}}">Employee Add</a>
+                                </li>
+                            </ul>
                         </li>
-                        {{-- customer --}}
+
+
+
+
+                        {{-- Customer Nav --}}
                         <li class="sidebar-item  has-sub">
                             <a href="#" class="sidebar-link">
                                 <i class="bi bi-person-badge-fill"></i>
                                 <span>Customer</span>
                             </a>
-                            <ul class="submenu" >
+                            <ul class="submenu">
                                 <li class="submenu-item ">
-                                    <a href="">Customer List</a>
+                                    <a href="{{route('customer.index')}}">Customer List</a>
                                 </li>
                                 <li class="submenu-item ">
-                                    <a href="">Customer Add</a>
+                                    <a href="{{route('customer.create')}}">Customer Add</a>
                                 </li>
-                                
+
                             </ul>
                         </li>
 
-                        
-                        {{-- Employee --}}
-                        {{-- <li class="sidebar-item  has-sub">
-                            <a href="#" class="sidebar-link">
-                                <i class="bi bi-grid-1x2-fill"></i>
-                                <span>Employee</span>
-                            </a>
-                            <ul class="submenu " >
-                                <li class="submenu-item ">
-                                    <a href="{{route('employee.add')}}">Add Employee</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="{{route('employee.list')}}">Employee List</a>
-                                </li>
 
-                            </ul>
-                        </li> --}}
-                        
 
-                       
 
                         {{-- lOGOUT  --}}
                         <li class="sidebar-item  ">

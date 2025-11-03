@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\dashboard\DashboardController;
+use App\Http\Controllers\Employee\EmployeeController;
+use App\Http\Controllers\Customer\CustomerController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -16,9 +18,27 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Protected Routes ==============================
 Route::middleware(['auth'])->group(function () {
-    // Dashboard
+
+    // Dashboard------------------
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // Employee Routes---------------
+    Route::controller(EmployeeController::class)->group(function () {
+    Route::get('/employee/list', 'index')->name('employee.index');
+    Route::get('/employee/create/{id?}', 'create')->name('employee.create');
+    Route::post('/employee/store', 'store')->name('employee.store');
+    Route::delete('/employee/{id}/delete', 'destroy')->name('employee.destroy');
+    });
+    
+    // Customer Routes---------------
+    Route::controller(CustomerController::class)->group(function () {
+    Route::get('/customer/list', 'index')->name('customer.index');
+    Route::get('/customer/create/{id?}', 'create')->name('customer.create');
+    Route::post('/customer/store', 'store')->name('customer.store');
+    Route::delete('/customer/{id}/delete', 'destroy')->name('customer.destroy');
+    });
+
+    
 
 });
 
