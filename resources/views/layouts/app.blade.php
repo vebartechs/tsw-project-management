@@ -54,6 +54,37 @@
             
 
             <div class="body-content">
+                {{-- Show error message --}}
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+               
+                {{-- Show info message --}}
+                @if (session('info'))
+                    <div class="alert alert-info">
+                        {{ session('info') }}
+                    </div>
+                @endif
+                {{-- Show warning message --}}
+                @if (session('warning'))
+                    <div class="alert alert-warning">
+                        {{ session('warning') }}
+                    </div>
+                @endif
+
+                {{-- validation error --}}
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 @yield('body-space')
             </div>
 
@@ -137,33 +168,7 @@
     
     @yield('foot-space')
 
-    {{-- SCRIPT FOR  navigatio menu select --}}
-    <script>
-       $( document ).ready(function(){
-            var aurl = window.location.href; // Get the absolute url
-            
-            var selected_main_menu = $('.sidebar-item > a').filter(function() { 
-                                    return $(this).prop('href') === aurl;
-                                })
-
-             
-             selected_main_menu.parent().addClass('active');
-
-            if(selected_main_menu.length == 0){
-
-                var selected_sub_menu = $('.sidebar-item > ul > li > a').filter(function() { 
-                                        return $(this).prop('href') === aurl;
-                                    })
-                                    
-                selected_sub_menu.parent('li.submenu-item').addClass('active');
-                selected_sub_menu.parent('li.submenu-item').parent('ul').addClass('active');
-                selected_sub_menu.parent('li.submenu-item').parent('ul').parent('li').addClass('active');
-
-            }
-
-          
-        });
-    </script>
+    
 </body>
 
 </html>
