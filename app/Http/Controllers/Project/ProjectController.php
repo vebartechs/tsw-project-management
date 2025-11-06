@@ -14,10 +14,16 @@ class ProjectController extends Controller
 {
     public function index()
     {
+        $projects = Project::with('days', 'deliverables')->paginate(12);
+        return view('projects.index', compact('projects'));
+    }
+
+
+    public function create()
+    {
         $events = Event::orderBy('name')->get();
         $deliverables = Deliverable::orderBy('name')->get();
-        $project->load('days', 'deliverables');
-        return view('projects.edit', compact('project', 'events', 'deliverables'));
+        return view('projects.create', compact('events', 'deliverables'));
     }
 
 
