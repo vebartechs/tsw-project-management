@@ -37,13 +37,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/customer/create/{id?}', 'create')->name('customer.create');
     Route::post('/customer/store', 'store')->name('customer.store');
     Route::delete('/customer/{id}/delete', 'destroy')->name('customer.destroy');
+
+    // Ajax customer
+    Route::get('/customer/search-customer', 'searchCustomer')->name('customer.searchCustomer');
     });
 
 
     // Project Routes---------------
+
+
     Route::controller(ProjectController::class)->group(function () {
     Route::get('/project/list', 'index')->name('project.index');
-    Route::get('/project/create/{id?}', 'create')->name('project.create');
+    Route::get('/project/select-customer', 'selectCustomer')->name('project.selectCustomer');
+    Route::get('/project/create/{customer_id}/{project_id?}', 'create')->name('project.create');
     Route::post('/project/store', 'store')->name('project.store');
     Route::delete('/project/{id}/delete', 'destroy')->name('project.destroy');
 

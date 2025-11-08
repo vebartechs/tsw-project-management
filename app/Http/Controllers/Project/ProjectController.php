@@ -8,7 +8,7 @@ use App\Models\Project\Project;
 use App\Models\Project\Event;
 use App\Models\Project\Deliverable;
 use App\Models\Project\ProjectDay;
-use Illuminate\Support\Facades\DB;
+use App\Models\Customer\Customer;
 
 class ProjectController extends Controller
 {
@@ -18,12 +18,19 @@ class ProjectController extends Controller
         return view('projects.index', compact('projects'));
     }
 
-
-    public function create()
+    // select customer
+    public function selectCustomer()
     {
+        return view('projects.select_customer');
+    }
+
+
+    public function create($customer_id,$project_id=null)
+    {
+        $customer = Customer::find($customer_id);
         $events = Event::orderBy('name')->get();
         $deliverables = Deliverable::orderBy('name')->get();
-        return view('projects.create', compact('events', 'deliverables'));
+        return view('projects.create', compact('events', 'deliverables','customer'));
     }
 
 
