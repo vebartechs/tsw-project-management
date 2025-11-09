@@ -31,7 +31,14 @@
                                 <i class="bi bi-stack"></i>
                                 <span>Projects</span>
                             </a>
-                           
+                            <ul class="submenu">
+                                <li class="submenu-item">
+                                    <a href="{{route('project.index')}}">Project List</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a href="{{route('project.selectCustomer')}}">Project Add</a>
+                                </li>
+                            </ul>
                         </li>
 
 

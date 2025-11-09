@@ -23,6 +23,8 @@
     <link rel="stylesheet" href="{{asset('assets/css/app.css')}}">
     <link rel="shortcut icon" href="{{asset('assets/images/logo/favicon.png')}}" type="image/x-icon">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     {{-- toster css & js--}}
     <link rel="stylesheet" href="{{asset('assets/css/toastr.min.css')}}">
     <script src="{{asset('assets/js/toastr.min.js')}}"></script>

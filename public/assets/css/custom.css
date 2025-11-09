@@ -86,5 +86,39 @@ footer{
 
 
 label {
-    font-size: 14px;
+    font-size: 15px;
+    color: black;
   }
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="email"],
+input[type="date"],
+input[type="datetime"],
+input[type="tel"],
+input[type="search"],
+input[type="url"],
+input[type="time"],
+.form-select,
+textarea {
+    background-color: #e6ffff;
+}
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="date"]:focus,
+input[type="datetime"]:focus,
+input[type="tel"]:focus,
+input[type="search"]:focus,
+input[type="url"]:focus,
+input[type="time"]:focus,
+.form-select:focus,
+textarea:focus {
+    background-color: #e6ffff;
+}
+
+
+
+
