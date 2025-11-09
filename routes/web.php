@@ -51,9 +51,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/project/select-customer', 'selectCustomer')->name('project.selectCustomer');
     Route::get('/project/create/{customer_id}/{project_id?}', 'create')->name('project.create');
     Route::post('/project/store', 'store')->name('project.store');
+    Route::get('/project/show/{id}', 'show')->name('project.show');
     Route::delete('/project/{id}/delete', 'destroy')->name('project.destroy');
 
-    Route::post('/project/add-deliverable', 'addDeliverable')->name('project.addDeliverable');
     });
 
    

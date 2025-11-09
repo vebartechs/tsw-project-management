@@ -3,11 +3,14 @@
 namespace App\Models\Project;
 
 use App\Models\Project\ProjectDay;
-use App\Models\Project\Deliverable;
+use App\Models\Project\ProjectDeliverable;
+use App\Models\Project\ProjectComplimentary;
+use App\Models\Customer\Customer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Project extends Model
 {
@@ -15,28 +18,37 @@ class Project extends Model
 
 
     protected $fillable = [
+        'customer_id',
         'title',
         'cost',
         'days',
-        'complimentary'
     ];
 
-
-    protected $casts = [
-        'complimentary' => 'array',
-    ];
 
 
 
     // relationship
-    public function days(): HasMany
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
+    }
+    public function projectdays(): HasMany
     {
         return $this->hasMany(ProjectDay::class);
     }
-
-
-    public function deliverables(): BelongsToMany
+    
+    public function projectdeliverables(): HasMany
     {
-        return $this->belongsToMany(Deliverable::class, 'project_deliverables');
+        return $this->hasMany(ProjectDeliverable::class);
     }
+
+    public function projectcomplimentary(): HasOne
+    {
+        return $this->hasOne(ProjectComplimentary::class);
+    }
+    
+
+
+
+    
 }
