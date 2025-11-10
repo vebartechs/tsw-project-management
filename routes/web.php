@@ -6,6 +6,7 @@ use App\Http\Controllers\Project\ProjectController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Employee\EmployeeController;
 use App\Http\Controllers\dashboard\DashboardController;
+use App\Http\Controllers\Project\ProjectEmployeeAssignmentController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -44,8 +45,6 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Project Routes---------------
-
-
     Route::controller(ProjectController::class)->group(function () {
     Route::get('/project/list', 'index')->name('project.index');
     Route::get('/project/select-customer', 'selectCustomer')->name('project.selectCustomer');
@@ -56,7 +55,11 @@ Route::middleware(['auth'])->group(function () {
 
     });
 
-   
+    // Employee Assignment Routes---------------
+    Route::controller(ProjectEmployeeAssignmentController::class)->group(function () {
+    Route::get('/employee/assign/{id}', 'create')->name('project.employee.assign.create');
+    Route::post('/employee/assign', 'store')->name('project.employee.assign.store');
+    });
 
     
 

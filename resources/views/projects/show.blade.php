@@ -130,6 +130,9 @@
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Delete Project</button>
+                    
+                    <a href="{{ route('project.employee.assign.create', $project->id) }}" class="btn btn-primary">Assign Employee</a>
+
                 </form>
             </div>
         </div>
