@@ -19,36 +19,70 @@ class ProjectEmployeeAssignmentController extends Controller
         return view('projects.assign-employee', compact('project', 'employees'));
     }
 
-    public function store(Request $request, $project_id)
+    public function store(Request $request)
     {
-        $request->validate([
-            'employee_id' => 'required|exists:employees,id',
-            'days' => 'required|array|min:1',
-            'days.*' => 'date',
-        ]);
+        // dd($request->all());
+
+        //work type
+        $photographer_work_type = 1;
+        $videographer_work_type = 2;
+        $drone_operator_work_type = 3;
+
+        $project_id = $request->project_id;
+       
 
         $project = Project::findOrFail($project_id);
-        
-        foreach ($request->days as $day) {
-            // Check if assignment already exists
-            $exists = ProjectEmployeeAssignment::where('project_id', $project_id)
-                ->where('employee_id', $request->employee_id)
-                ->whereDate('assigned_date', $day)
-                ->exists();
 
-            if (!$exists) {
-                ProjectEmployeeAssignment::create([
-                    'project_id' => $project_id,
-                    'employee_id' => $request->employee_id,
-                    'assigned_date' => $day,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            }
+        // delete previous assignments
+        ProjectEmployeeAssignment::where('project_id', $project_id)->delete();
+        
+
+        
+        foreach ($request->photographers as $project_day_ids=>$employee_ids) {
+
+
+           foreach ($employee_ids as $employee_id) {
+            ProjectEmployeeAssignment::create([
+                'project_id' => $project_id,
+                'employee_id' => $employee_id,
+                'project_day_id' => $project_day_ids,
+                'work_type' => $photographer_work_type,
+            ]);
+           }
+                
+            
+        }
+
+        foreach ($request->videographers as $project_day_ids=>$employee_ids) {
+
+           foreach ($employee_ids as $employee_id) {
+            ProjectEmployeeAssignment::create([
+                'project_id' => $project_id,
+                'employee_id' => $employee_id,
+                'project_day_id' => $project_day_ids,
+                'work_type' => $videographer_work_type,
+            ]);
+           }
+                
+            
+        }
+
+        foreach ($request->drone_operators as $project_day_ids=>$employee_ids) {
+
+           foreach ($employee_ids as $employee_id) {
+            ProjectEmployeeAssignment::create([
+                'project_id' => $project_id,
+                'employee_id' => $employee_id,
+                'project_day_id' => $project_day_ids,
+                'work_type' => $drone_operator_work_type,
+            ]);
+           }
+                
+            
         }
 
         return redirect()
-            ->route('projects.employees.assign', $project_id)
+            ->route('project.show', $project->id)
             ->with('success', 'Employee assigned successfully');
     }
 }

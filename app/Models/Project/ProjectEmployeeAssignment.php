@@ -13,6 +13,7 @@ class ProjectEmployeeAssignment extends Model
         'project_id',
         'project_day_id',
         'employee_id',
+        'work_type',
     ];
 
     public function project()

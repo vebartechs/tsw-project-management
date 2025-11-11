@@ -10,6 +10,7 @@ use App\Models\Project\ProjectDay;
 use App\Models\Project\Deliverable;
 use App\Http\Controllers\Controller;
 use App\Models\Project\ProjectDeliverable;
+use App\Models\Project\ProjectEmployeeAssignment;
 
 class ProjectController extends Controller
 {
@@ -102,7 +103,8 @@ class ProjectController extends Controller
     public function show($id)
     {
         $project = Project::find($id);
-        return view('projects.show', compact('project'));
+        $projectEmployeeAssignments = ProjectEmployeeAssignment::where('project_id', $id)->get();
+        return view('projects.show', compact('project','projectEmployeeAssignments'));
     }
 
 
