@@ -27,34 +27,52 @@
 
             <!-- Coverage Details -->
             @if($project->projectdays->count() > 0)
-                <div class="card mb-4 border">
-                    <div class="card-header bg-light">
+                <div class="card mb-2 border">
+                    <div class="card-header p-2 bg-light">
                         <h5 class="mb-0">Coverage Details</h5>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             @foreach($project->projectdays as $day)
-                                <div class="col-md-12 mb-3">
+                                <div class="col-md-12 mb-1">
                                     <div class="card">
-                                        <div class="card-header">
-                                            <h6 class="mb-0">Day {{ $loop->iteration }}</h6>
+                                        <div class="card-header p-2">
+                                            <h6 class="mb-0">Day {{ $loop->iteration }}, ( {{ \Carbon\Carbon::parse($day->date)->format('d-m-Y') }} ) ( <strong>Location:</strong> {{ $day->location ?? 'N/A' }} )</h6>
+                                            <div><strong>Event:</strong> {{ $day->event->name ?? 'N/A' }}</div>
+                                            <div><strong>Guests:</strong> {{ $day->guests ?? '0' }}</div>
                                         </div>
                                         <div class="card-body">
                                             <div class="row">
-                                                <div class="col-md-3">
-                                                    <div><strong>Date:</strong> {{ \Carbon\Carbon::parse($day->date)->format('M d, Y') }}</div>
-                                                    <div><strong>Event:</strong> {{ $day->event->name ?? 'N/A' }}</div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <div><strong>Location:</strong> {{ $day->location ?? 'N/A' }}</div>
-                                                    <div><strong>Guests:</strong> {{ $day->guests ?? '0' }}</div>
-                                                </div>
-                                                <div class="col-md-3">
+                                                {{-- photographers --}}
+                                                <div class="col-md-4">
                                                     <div><strong>Photographers:</strong> {{ $day->photographers ?? '0' }}</div>
-                                                    <div><strong>Videographers:</strong> {{ $day->videographers ?? '0' }}</div>
+                                                    @foreach($projectEmployeeAssignments as $projectEmployeeAssignment)
+                                                        @if($projectEmployeeAssignment->project_day_id == $day->id && $projectEmployeeAssignment->work_type == 1)
+                                                            <div>{{ $projectEmployeeAssignment->employee->name }}</div>
+                                                        @endif
+                                                    @endforeach
                                                 </div>
-                                                <div class="col-md-3">
+
+                                                {{-- videographers --}}
+                                                <div class="col-md-4">
+                                                    <div><strong>Videographers:</strong> {{ $day->videographers ?? '0' }}</div>
+                                                    @foreach($projectEmployeeAssignments as $projectEmployeeAssignment)
+                                                        @if($projectEmployeeAssignment->project_day_id == $day->id && $projectEmployeeAssignment->work_type == 2)
+                                                            <div>
+                                                                {{ $projectEmployeeAssignment->employee->name }}
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+
+                                                {{-- drone operators --}}
+                                                <div class="col-md-4">
                                                     <div><strong>Drone Operators:</strong> {{ $day->drone_operators ?? '0' }}</div>
+                                                    @foreach($projectEmployeeAssignments as $projectEmployeeAssignment)
+                                                        @if($projectEmployeeAssignment->project_day_id == $day->id && $projectEmployeeAssignment->work_type == 3)
+                                                            <div>{{ $projectEmployeeAssignment->employee->name }}</div>
+                                                        @endif
+                                                    @endforeach
                                                 </div>
                                             </div>
                                         </div>
@@ -68,8 +86,8 @@
 
             <!-- Deliverables -->
             @if($project->projectdeliverables->count() > 0)
-                <div class="card mb-4 border">
-                    <div class="card-header bg-light">
+                <div class="card mb-2 border">
+                    <div class="card-header p-2 bg-light">
                         <h5 class="mb-0">Deliverables</h5>
                     </div>
                     <div class="card-body">
@@ -84,7 +102,7 @@
 
             <!-- Complimentary -->
             <div class="card mb-4 border">
-                <div class="card-header bg-light">
+                <div class="card-header p-2 bg-light">
                     <h5 class="mb-0">Complimentary Services</h5>
                 </div>
                 <div class="card-body">

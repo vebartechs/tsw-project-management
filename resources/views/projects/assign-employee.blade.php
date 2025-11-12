@@ -56,12 +56,15 @@
                                                     <div><strong>Photographers:</strong> {{ $day->photographers ?? '0' }}
                                                     </div>
                                                     @if ($day->photographers > 0)
+                                                    @php
+                                                        $photographers = $projectEmployeeAssignments->where('project_day_id', $day->id)->where('work_type', 1)->pluck('employee_id')->toArray();
+                                                    @endphp
                                                         @for ($i = 1; $i <= $day->photographers; $i++)
                                                             {{-- select employee --}}
                                                             <select name="photographers[{{ $day->id }}][]" class="form-select form-select-sm">
                                                                 <option value="">Select Employee</option>
                                                                 @foreach ($employees as $employee)
-                                                                    <option value="{{ $employee->id }}">
+                                                                    <option value="{{ $employee->id }}" {{ $employee->id == ($photographers[$i-1] ?? null) ? 'selected' : '' }}>
                                                                         {{ $employee->name }}<small> ( {{ $employee->profession->name }} )</small></option>
                                                                 @endforeach
                                                             </select>
@@ -73,12 +76,15 @@
                                                 <div class="col-md-4">
                                                     <div><strong>Videographers:</strong> {{ $day->videographers ?? '0' }}</div>
                                                     @if ($day->videographers > 0)
+                                                    @php
+                                                        $videographers = $projectEmployeeAssignments->where('project_day_id', $day->id)->where('work_type', 2)->pluck('employee_id')->toArray();
+                                                    @endphp
                                                         @for ($i = 1; $i <= $day->videographers; $i++)
                                                             {{-- select employee --}}
                                                             <select name="videographers[{{ $day->id }}][]" class="form-select form-select-sm">
                                                                 <option value="">Select Employee</option>
                                                                 @foreach ($employees as $employee)
-                                                                    <option value="{{ $employee->id }}">
+                                                                    <option value="{{ $employee->id }}" {{ $employee->id == ($videographers[$i-1] ?? null) ? 'selected' : '' }}>
                                                                         {{ $employee->name }} <small> ( {{ $employee->profession->name }} )</small>
                                                                     </option>
                                                                 @endforeach
@@ -93,11 +99,14 @@
                                                         {{ $day->drone_operators ?? '0' }}</div>
                                                     @if ($day->drone_operators > 0)
                                                         @for ($i = 1; $i <= $day->drone_operators; $i++)
+                                                        @php
+                                                        $drone_operators = $projectEmployeeAssignments->where('project_day_id', $day->id)->where('work_type', 3)->pluck('employee_id')->toArray();
+                                                        @endphp
                                                             {{-- select employee --}}
                                                             <select name="drone_operators[{{ $day->id }}][]" class="form-select form-select-sm">
                                                                 <option value="">Select Employee</option>
                                                                 @foreach ($employees as $employee)
-                                                                    <option value="{{ $employee->id }}">
+                                                                    <option value="{{ $employee->id }}" {{  $employee->id == ($drone_operators[$i-1] ?? null) ? 'selected' : '' }}>
                                                                         {{ $employee->name }} <small> ( {{ $employee->profession->name }} )</small>
                                                                     </option>
                                                                 @endforeach
