@@ -16,7 +16,9 @@ class ProjectEmployeeAssignmentController extends Controller
         $project = Project::findOrFail($project_id);
         $employees = Employee::all();
 
-        return view('projects.assign-employee', compact('project', 'employees'));
+        $projectEmployeeAssignments = ProjectEmployeeAssignment::where('project_id', $project_id)->get();
+
+        return view('projects.assign-employee', compact('project', 'employees','projectEmployeeAssignments'));
     }
 
     public function store(Request $request)
@@ -42,6 +44,9 @@ class ProjectEmployeeAssignmentController extends Controller
 
 
            foreach ($employee_ids as $employee_id) {
+            if($employee_id == null){
+                continue;
+            }
             ProjectEmployeeAssignment::create([
                 'project_id' => $project_id,
                 'employee_id' => $employee_id,
@@ -56,6 +61,9 @@ class ProjectEmployeeAssignmentController extends Controller
         foreach ($request->videographers as $project_day_ids=>$employee_ids) {
 
            foreach ($employee_ids as $employee_id) {
+            if($employee_id == null){
+                continue;
+            }
             ProjectEmployeeAssignment::create([
                 'project_id' => $project_id,
                 'employee_id' => $employee_id,
@@ -70,6 +78,9 @@ class ProjectEmployeeAssignmentController extends Controller
         foreach ($request->drone_operators as $project_day_ids=>$employee_ids) {
 
            foreach ($employee_ids as $employee_id) {
+            if($employee_id == null){
+                continue;
+            }
             ProjectEmployeeAssignment::create([
                 'project_id' => $project_id,
                 'employee_id' => $employee_id,

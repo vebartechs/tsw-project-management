@@ -104,6 +104,7 @@ class ProjectController extends Controller
     {
         $project = Project::find($id);
         $projectEmployeeAssignments = ProjectEmployeeAssignment::where('project_id', $id)->get();
+       
         return view('projects.show', compact('project','projectEmployeeAssignments'));
     }
 
