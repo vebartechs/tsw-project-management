@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Project;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Project\Project;
-use App\Models\Employee\Employee; 
+use App\Models\Employee\Employee;
 use App\Models\Project\ProjectEmployeeAssignment;
-use Carbon\Carbon;        
+use Carbon\Carbon;
 
 class ProjectEmployeeAssignmentController extends Controller
 {
@@ -18,7 +18,7 @@ class ProjectEmployeeAssignmentController extends Controller
 
         $projectEmployeeAssignments = ProjectEmployeeAssignment::where('project_id', $project_id)->get();
 
-        return view('projects.assign-employee', compact('project', 'employees','projectEmployeeAssignments'));
+        return view('projects.assign-employee', compact('project', 'employees', 'projectEmployeeAssignments'));
     }
 
     public function store(Request $request)
@@ -31,65 +31,65 @@ class ProjectEmployeeAssignmentController extends Controller
         $drone_operator_work_type = 3;
 
         $project_id = $request->project_id;
-       
+
 
         $project = Project::findOrFail($project_id);
 
         // delete previous assignments
         ProjectEmployeeAssignment::where('project_id', $project_id)->delete();
-        
-
-        
-        foreach ($request->photographers as $project_day_ids=>$employee_ids) {
 
 
-           foreach ($employee_ids as $employee_id) {
-            if($employee_id == null){
-                continue;
+        if ($request->photographers) {
+            foreach ($request->photographers as $project_day_ids => $employee_ids) {
+
+
+                foreach ($employee_ids as $employee_id) {
+                    if ($employee_id == null) {
+                        continue;
+                    }
+                    ProjectEmployeeAssignment::create([
+                        'project_id' => $project_id,
+                        'employee_id' => $employee_id,
+                        'project_day_id' => $project_day_ids,
+                        'work_type' => $photographer_work_type,
+                    ]);
+                }
             }
-            ProjectEmployeeAssignment::create([
-                'project_id' => $project_id,
-                'employee_id' => $employee_id,
-                'project_day_id' => $project_day_ids,
-                'work_type' => $photographer_work_type,
-            ]);
-           }
-                
-            
         }
 
-        foreach ($request->videographers as $project_day_ids=>$employee_ids) {
+        if ($request->videographers) {
 
-           foreach ($employee_ids as $employee_id) {
-            if($employee_id == null){
-                continue;
+            foreach ($request->videographers as $project_day_ids => $employee_ids) {
+
+                foreach ($employee_ids as $employee_id) {
+                    if ($employee_id == null) {
+                        continue;
+                    }
+                    ProjectEmployeeAssignment::create([
+                        'project_id' => $project_id,
+                        'employee_id' => $employee_id,
+                        'project_day_id' => $project_day_ids,
+                        'work_type' => $videographer_work_type,
+                    ]);
+                }
             }
-            ProjectEmployeeAssignment::create([
-                'project_id' => $project_id,
-                'employee_id' => $employee_id,
-                'project_day_id' => $project_day_ids,
-                'work_type' => $videographer_work_type,
-            ]);
-           }
-                
-            
         }
 
-        foreach ($request->drone_operators as $project_day_ids=>$employee_ids) {
+        if ($request->drone_operators) {
+            foreach ($request->drone_operators as $project_day_ids => $employee_ids) {
 
-           foreach ($employee_ids as $employee_id) {
-            if($employee_id == null){
-                continue;
+                foreach ($employee_ids as $employee_id) {
+                    if ($employee_id == null) {
+                        continue;
+                    }
+                    ProjectEmployeeAssignment::create([
+                        'project_id' => $project_id,
+                        'employee_id' => $employee_id,
+                        'project_day_id' => $project_day_ids,
+                        'work_type' => $drone_operator_work_type,
+                    ]);
+                }
             }
-            ProjectEmployeeAssignment::create([
-                'project_id' => $project_id,
-                'employee_id' => $employee_id,
-                'project_day_id' => $project_day_ids,
-                'work_type' => $drone_operator_work_type,
-            ]);
-           }
-                
-            
         }
 
         return redirect()

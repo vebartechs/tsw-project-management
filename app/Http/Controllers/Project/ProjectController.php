@@ -38,6 +38,8 @@ class ProjectController extends Controller
 
      public function store(Request $request)
     {
+
+        // return $request->all();
         // ✅ Step 1: Validate input
         $request->validate([
             'title'     => 'required|string|max:255',
@@ -86,10 +88,10 @@ class ProjectController extends Controller
                     'date'            => $day['date'] ?? null,
                     'event_id'        => $day['event_id'] ?? null,
                     'location'        => $day['location'] ?? null,
-                    'guests'          => $day['guests'] ?? null,
-                    'photographers'   => $day['photographers'] ?? null,
-                    'videographers'   => $day['videographers'] ?? null,
-                    'drone_operators' => $day['drone_operators'] ?? null,
+                    'guests'          => $day['guests'] ?? 0,
+                    'photographers'   => $day['photographers'] ?? 0,
+                    'videographers'   => $day['videographers'] ?? 0,
+                    'drone_operators' => $day['drone_operators'] ?? 0,
                 ]);
             }
         }

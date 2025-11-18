@@ -216,10 +216,10 @@
                         date: $b.find('.day-date').val(),
                         event_id: $b.find('.event-select').val(),
                         location: $b.find('input[name^="day_location_"]').val(),
-                        guests: $b.find('input[name^="day_guests_"]').val(),
-                        photographers: $b.find('input[name^="day_photographers_"]').val(),
-                        videographers: $b.find('input[name^="day_videographers_"]').val(),
-                        drone_operators: $b.find('input[name^="day_drone_"]').val(),
+                        guests: $b.find('input[name^="day_guests_"]').val()||0,
+                        photographers: $b.find('input[name^="day_photographers_"]').val() || 0,
+                        videographers: $b.find('input[name^="day_videographers_"]').val()||0,
+                        drone_operators: $b.find('input[name^="day_drone_"]').val()||0,
                     });
                 });
                 $('#daysDataInput').val(JSON.stringify(daysArr));
