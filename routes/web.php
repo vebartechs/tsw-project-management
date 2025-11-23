@@ -59,6 +59,9 @@ Route::middleware(['auth'])->group(function () {
     Route::controller(ProjectEmployeeAssignmentController::class)->group(function () {
     Route::get('/employee/assign/{id}', 'create')->name('project.employee.assign.create');
     Route::post('/employee/assign', 'store')->name('project.employee.assign.store');
+    Route::get('/employee/schedule', 'schedule')->name('project.employee.schedule');
+    // Ajax already assigned employees by date
+    Route::get('/employee/already-assigned-employees', 'alreadyAssignedEmployees')->name('project.assignments.alreadyAssignedEmployees');
     });
 
     

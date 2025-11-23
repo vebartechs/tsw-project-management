@@ -38,6 +38,9 @@
                                 <li class="submenu-item">
                                     <a href="{{route('project.selectCustomer')}}">Project Add</a>
                                 </li>
+                                <li class="submenu-item">
+                                    <a href="{{route('project.employee.schedule')}}">Monthly Schedule</a>
+                                </li>
                             </ul>
                         </li>
 

@@ -11,6 +11,7 @@ class ProjectComplimentary extends Model
         'project_id',
         'drones',
         'pre_wedding',
+        'pre_wedding_date',
         'type',
         'photographers',
         'videographers',
