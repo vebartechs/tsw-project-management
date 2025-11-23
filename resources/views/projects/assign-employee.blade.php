@@ -47,7 +47,8 @@
                                             <div class="card-header p-2">
                                                 <h6 class="mb-0">Day {{ $loop->iteration }}, (
                                                     {{ \Carbon\Carbon::parse($day->date)->format('d-m-Y') }} ) (
-                                                    <strong>Location:</strong> {{ $day->location ?? 'N/A' }} )</h6>
+                                                    <strong>Location:</strong> {{ $day->location ?? 'N/A' }} )
+                                                </h6>
                                                 <strong>Event:</strong> {{ $day->event->name ?? 'N/A' }},
                                                 <strong>Guests:</strong> {{ $day->guests ?? '0' }}
                                             </div>
@@ -71,7 +72,8 @@
                                                             @for ($i = 1; $i <= $day->photographers; $i++)
                                                                 {{-- select employee --}}
                                                                 <select name="photographers[{{ $day->id }}][]"
-                                                                    class="form-select form-select-sm">
+                                                                    class="form-select form-select-sm employee-select"
+                                                                    data-date="{{ $day->date }}">
                                                                     <option value="">Select Employee</option>
                                                                     @foreach ($employees as $employee)
                                                                         <option value="{{ $employee->id }}"
@@ -100,7 +102,8 @@
                                                             @for ($i = 1; $i <= $day->videographers; $i++)
                                                                 {{-- select employee --}}
                                                                 <select name="videographers[{{ $day->id }}][]"
-                                                                    class="form-select form-select-sm">
+                                                                    class="form-select form-select-sm employee-select"
+                                                                    data-date="{{ $day->date }}">
                                                                     <option value="">Select Employee</option>
                                                                     @foreach ($employees as $employee)
                                                                         <option value="{{ $employee->id }}"
@@ -129,7 +132,8 @@
                                                                 @endphp
                                                                 {{-- select employee --}}
                                                                 <select name="drone_operators[{{ $day->id }}][]"
-                                                                    class="form-select form-select-sm">
+                                                                    class="form-select form-select-sm employee-select"
+                                                                    data-date="{{ $day->date }}">
                                                                     <option value="">Select Employee</option>
                                                                     @foreach ($employees as $employee)
                                                                         <option value="{{ $employee->id }}"
@@ -191,7 +195,8 @@
                                                     @if ($project->projectcomplimentary->photographers > 0)
                                                         @for ($i = 1; $i <= $project->projectcomplimentary->photographers; $i++)
                                                             <select name="complimentary_photographers[]"
-                                                                class="form-select form-select-sm">
+                                                                class="form-select form-select-sm employee-select"
+                                                                data-date="{{ $project->projectcomplimentary->pre_wedding_date }}">
                                                                 <option value="">Select Employee</option>
                                                                 @foreach ($employees as $employee)
                                                                     <option value="{{ $employee->id }}"
@@ -210,10 +215,10 @@
                                                     <strong>Videographers:</strong>
                                                     {{ $project->projectcomplimentary->videographers ?? '0' }}
                                                     @if ($project->projectcomplimentary->videographers > 0)
-
                                                         @for ($i = 1; $i <= $project->projectcomplimentary->videographers; $i++)
                                                             <select name="complimentary_videographers[]"
-                                                                class="form-select form-select-sm">
+                                                                class="form-select form-select-sm employee-select"
+                                                                data-date="{{ $project->projectcomplimentary->pre_wedding_date }}">
                                                                 <option value="">Select Employee</option>
                                                                 @foreach ($employees as $employee)
                                                                     <option value="{{ $employee->id }}"
@@ -252,4 +257,56 @@
                     </div>
                 </div>
             </form>
+        @endsection
+
+
+
+        @section('foot-space')
+            <script>
+                $(document).ready(function() {
+
+                    // Helper: send date to server and get assigned ids (returns jQuery promise)
+                    function fetchAssignedByDate(date) {
+                        if (!date) {
+                            return $.Deferred().resolve({
+                                assigned: []
+                            }).promise();
+                        }
+                        return $.ajax({
+                            url: "{{ route('project.assignments.alreadyAssignedEmployees') }}",
+                            method: 'GET',
+                            data: {
+                                date: date
+                            },
+                            dataType: 'json'
+                        });
+                    }
+
+                    // Helper: apply assigned ids to select element
+                    function applyAssignedToSelect($sel, assigned) {
+                        $sel.find('option').prop('disabled', false);
+                        assigned.forEach(function(id) {
+                            $sel.find('option[value="' + id + '"]').prop('disabled', true);
+                            $sel.find('option[value="' + id + '"]').prop('disabled', true).css('background-color', '#f2dede');
+
+                        });
+                    }
+
+                    // Use delegated focusin so it works if selects are dynamic
+                    $(document).on('focusin', '.employee-select', function() {
+                        const $sel = $(this);
+                        const date = $sel.data('date');
+                        fetchAssignedByDate(date).done(function(res) {
+                            
+                            const assigned = res && res.assigned ? res.assigned : [];
+
+                            console.log(assigned);
+                            
+                            applyAssignedToSelect($sel, assigned);
+                        });
+                    });
+
+
+                });
+            </script>
         @endsection
