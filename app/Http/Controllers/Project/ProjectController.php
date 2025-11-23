@@ -11,6 +11,7 @@ use App\Models\Project\Deliverable;
 use App\Http\Controllers\Controller;
 use App\Models\Project\ProjectDeliverable;
 use App\Models\Project\ProjectEmployeeAssignment;
+use App\Models\Project\ProjectComplimentary;
 
 class ProjectController extends Controller
 {
@@ -29,10 +30,29 @@ class ProjectController extends Controller
 
     public function create($customer_id,$project_id=null)
     {
+        
         $customer = Customer::find($customer_id);
         $events = Event::orderBy('name')->get();
         $deliverables = Deliverable::orderBy('name')->get();
-        return view('projects.create', compact('events', 'deliverables','customer'));
+
+
+        if($project_id){
+            $project = Project::find($project_id);
+            $projectDays = ProjectDay::where('project_id', $project_id)->get();
+
+            $projectDeliverables = ProjectDeliverable::where('project_id', $project_id)->get();
+            $deliverables = $projectDeliverables;
+
+            $projectComplimentary = ProjectComplimentary::where('project_id', $project_id)->first();
+        }
+        else{
+            $project = new Project();
+            $projectDays = new ProjectDay();
+            $projectDeliverables = new ProjectDeliverable();
+            $projectComplimentary = new ProjectComplimentary();
+        }
+
+        return view('projects.create', compact('events', 'deliverables','customer','project','projectDays','projectDeliverables','projectComplimentary'));
     }
 
 
@@ -47,13 +67,30 @@ class ProjectController extends Controller
             'days_data' => 'required|string',
         ]);
 
-        // ✅ Step 2: Create Project
-        $project = Project::create([
-            'customer_id'      => $request->customer_id ?? null,
-            'title'            => $request->title,
-            'days'             => $request->days,
-            'cost'             => $request->cost,
-        ]);
+        if($request->project_id){
+            $project = Project::find($request->project_id);
+
+            $project->update([
+                'customer_id'      => $request->customer_id ?? null,
+                'title'            => $request->title,
+                'days'             => $request->days,
+                'cost'             => $request->cost,
+            ]);
+
+            ProjectDeliverable::where('project_id', $request->project_id)->delete();
+            ProjectDay::where('project_id', $request->project_id)->delete();
+            ProjectComplimentary::where('project_id', $request->project_id)->delete();
+        }else{
+            
+            // ✅ Step 2: Create Project
+            $project = Project::create([
+                'customer_id'      => $request->customer_id ?? null,
+                'title'            => $request->title,
+                'days'             => $request->days,
+                'cost'             => $request->cost,
+            ]);
+        }
+
 
         // ✅ Step 3: Save Deliverables using relationship
         if ($request->filled('deliverables')) {
@@ -72,6 +109,7 @@ class ProjectController extends Controller
             'project_id' => $project->id,
             'drones' => $request->number_of_drones,
             'pre_wedding' => $request->pre_wedding,
+            'pre_wedding_date' => $request->pre_wedding_date,
             'type' => $request->type,
             'photographers' => $request->photographers,
             'videographers' => $request->videographers,

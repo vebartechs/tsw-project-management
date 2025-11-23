@@ -5,6 +5,7 @@ namespace App\Models\Project;
 use App\Models\Employee\Employee;
 use App\Models\Project\Project;
 use App\Models\Project\ProjectDay;
+use App\Models\Project\ProjectComplimentary;
 use Illuminate\Database\Eloquent\Model;
 
 class ProjectEmployeeAssignment extends Model
@@ -12,6 +13,7 @@ class ProjectEmployeeAssignment extends Model
     protected $fillable = [
         'project_id',
         'project_day_id',
+        'project_complimentary_id',
         'employee_id',
         'work_type',
     ];
@@ -29,5 +31,10 @@ class ProjectEmployeeAssignment extends Model
     public function projectDay()
     {
         return $this->belongsTo(ProjectDay::class, 'project_day_id');
+    }
+
+    public function projectComplimentary()
+    {
+        return $this->belongsTo(ProjectComplimentary::class, 'project_complimentary_id');
     }
 }

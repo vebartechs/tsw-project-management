@@ -13,7 +13,8 @@
             <div class="row mb-4">
                 <div class="col-md-6">
                     <h5>Customer Details</h5>
-                    <div class="mb-2"><strong>Name:</strong> {{ $project->customer->name }},  <strong>Mobile:</strong> {{ $project->customer->mobile }}</div>
+                    <div class="mb-2"><strong>Name:</strong> {{ $project->customer->name }}, <strong>Mobile:</strong>
+                        {{ $project->customer->mobile }}</div>
                     <div class="mb-2"><strong>Email:</strong> {{ $project->customer->email }}</div>
                     <div><strong>Address:</strong> {{ $project->customer->address }}</div>
                 </div>
@@ -31,107 +32,224 @@
                 @method('POST')
                 <input type="hidden" name="project_id" value="{{ $project->id }}">
 
-            <!-- Coverage Details -->
-            @if ($project->projectdays->count() > 0)
-                <div class="card mb-2 border">
-                    <div class="card-header bg-light p-2">
-                        <h5 class="mb-0">Coverage Details</h5>
-                    </div>
+                <!-- Coverage Details -->
+                @if ($project->projectdays->count() > 0)
+                    <div class="card mb-2 border">
+                        <div class="card-header bg-light p-2">
+                            <h5 class="mb-0">Coverage Details</h5>
+                        </div>
 
-                    <div class="card-body p-2">
-                        <div class="row">
-                            @foreach ($project->projectdays as $day)
-                                <div class="col-md-12 mb-2">
-                                    <div class="card">
-                                        <div class="card-header p-2">
-                                            <h6 class="mb-0">Day {{ $loop->iteration }}, ( {{ \Carbon\Carbon::parse($day->date)->format('d-m-Y') }} ) ( <strong>Location:</strong> {{ $day->location ?? 'N/A' }} )</h6>
-                                            <strong>Event:</strong> {{ $day->event->name ?? 'N/A' }},  <strong>Guests:</strong> {{ $day->guests ?? '0' }}
-                                        </div>
-                                        <div class="card-body p-2">
+                        <div class="card-body p-2">
+                            <div class="row">
+                                @foreach ($project->projectdays as $day)
+                                    <div class="col-md-12 mb-2">
+                                        <div class="card">
+                                            <div class="card-header p-2">
+                                                <h6 class="mb-0">Day {{ $loop->iteration }}, (
+                                                    {{ \Carbon\Carbon::parse($day->date)->format('d-m-Y') }} ) (
+                                                    <strong>Location:</strong> {{ $day->location ?? 'N/A' }} )</h6>
+                                                <strong>Event:</strong> {{ $day->event->name ?? 'N/A' }},
+                                                <strong>Guests:</strong> {{ $day->guests ?? '0' }}
+                                            </div>
+                                            <div class="card-body p-2">
 
-                                            <div class="row">
-                                                
-                                                {{-- photographers --}}
-                                                <div class="col-md-4">
-                                                    <div><strong>Photographers:</strong> {{ $day->photographers ?? '0' }}
+                                                <div class="row">
+
+                                                    {{-- photographers --}}
+                                                    <div class="col-md-4">
+                                                        <div><strong>Photographers:</strong>
+                                                            {{ $day->photographers ?? '0' }}
+                                                        </div>
+                                                        @if ($day->photographers > 0)
+                                                            @php
+                                                                $photographers = $projectEmployeeAssignments
+                                                                    ->where('project_day_id', $day->id)
+                                                                    ->where('work_type', 1)
+                                                                    ->pluck('employee_id')
+                                                                    ->toArray();
+                                                            @endphp
+                                                            @for ($i = 1; $i <= $day->photographers; $i++)
+                                                                {{-- select employee --}}
+                                                                <select name="photographers[{{ $day->id }}][]"
+                                                                    class="form-select form-select-sm">
+                                                                    <option value="">Select Employee</option>
+                                                                    @foreach ($employees as $employee)
+                                                                        <option value="{{ $employee->id }}"
+                                                                            {{ $employee->id == ($photographers[$i - 1] ?? null) ? 'selected' : '' }}>
+                                                                            {{ $employee->name }}<small> (
+                                                                                {{ $employee->profession->name }} )</small>
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            @endfor
+                                                        @endif
+
                                                     </div>
-                                                    @if ($day->photographers > 0)
-                                                    @php
-                                                        $photographers = $projectEmployeeAssignments->where('project_day_id', $day->id)->where('work_type', 1)->pluck('employee_id')->toArray();
-                                                    @endphp
-                                                        @for ($i = 1; $i <= $day->photographers; $i++)
-                                                            {{-- select employee --}}
-                                                            <select name="photographers[{{ $day->id }}][]" class="form-select form-select-sm">
-                                                                <option value="">Select Employee</option>
-                                                                @foreach ($employees as $employee)
-                                                                    <option value="{{ $employee->id }}" {{ $employee->id == ($photographers[$i-1] ?? null) ? 'selected' : '' }}>
-                                                                        {{ $employee->name }}<small> ( {{ $employee->profession->name }} )</small></option>
-                                                                @endforeach
-                                                            </select>
-                                                        @endfor
-                                                    @endif
+                                                    {{-- Videographers --}}
+                                                    <div class="col-md-4">
+                                                        <div><strong>Videographers:</strong>
+                                                            {{ $day->videographers ?? '0' }}</div>
+                                                        @if ($day->videographers > 0)
+                                                            @php
+                                                                $videographers = $projectEmployeeAssignments
+                                                                    ->where('project_day_id', $day->id)
+                                                                    ->where('work_type', 2)
+                                                                    ->pluck('employee_id')
+                                                                    ->toArray();
+                                                            @endphp
+                                                            @for ($i = 1; $i <= $day->videographers; $i++)
+                                                                {{-- select employee --}}
+                                                                <select name="videographers[{{ $day->id }}][]"
+                                                                    class="form-select form-select-sm">
+                                                                    <option value="">Select Employee</option>
+                                                                    @foreach ($employees as $employee)
+                                                                        <option value="{{ $employee->id }}"
+                                                                            {{ $employee->id == ($videographers[$i - 1] ?? null) ? 'selected' : '' }}>
+                                                                            {{ $employee->name }} <small> (
+                                                                                {{ $employee->profession->name }} )</small>
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            @endfor
+                                                        @endif
+                                                    </div>
 
+                                                    {{-- Drone Operators --}}
+                                                    <div class="col-md-4">
+                                                        <div><strong>Drone Operators:</strong>
+                                                            {{ $day->drone_operators ?? '0' }}</div>
+                                                        @if ($day->drone_operators > 0)
+                                                            @for ($i = 1; $i <= $day->drone_operators; $i++)
+                                                                @php
+                                                                    $drone_operators = $projectEmployeeAssignments
+                                                                        ->where('project_day_id', $day->id)
+                                                                        ->where('work_type', 3)
+                                                                        ->pluck('employee_id')
+                                                                        ->toArray();
+                                                                @endphp
+                                                                {{-- select employee --}}
+                                                                <select name="drone_operators[{{ $day->id }}][]"
+                                                                    class="form-select form-select-sm">
+                                                                    <option value="">Select Employee</option>
+                                                                    @foreach ($employees as $employee)
+                                                                        <option value="{{ $employee->id }}"
+                                                                            {{ $employee->id == ($drone_operators[$i - 1] ?? null) ? 'selected' : '' }}>
+                                                                            {{ $employee->name }} <small> (
+                                                                                {{ $employee->profession->name }} )</small>
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            @endfor
+                                                        @endif
+                                                    </div>
+                                                    {{-- Assistant --}}
                                                 </div>
-                                                {{-- Videographers --}}
-                                                <div class="col-md-4">
-                                                    <div><strong>Videographers:</strong> {{ $day->videographers ?? '0' }}</div>
-                                                    @if ($day->videographers > 0)
-                                                    @php
-                                                        $videographers = $projectEmployeeAssignments->where('project_day_id', $day->id)->where('work_type', 2)->pluck('employee_id')->toArray();
-                                                    @endphp
-                                                        @for ($i = 1; $i <= $day->videographers; $i++)
-                                                            {{-- select employee --}}
-                                                            <select name="videographers[{{ $day->id }}][]" class="form-select form-select-sm">
-                                                                <option value="">Select Employee</option>
-                                                                @foreach ($employees as $employee)
-                                                                    <option value="{{ $employee->id }}" {{ $employee->id == ($videographers[$i-1] ?? null) ? 'selected' : '' }}>
-                                                                        {{ $employee->name }} <small> ( {{ $employee->profession->name }} )</small>
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                        @endfor
-                                                    @endif
-                                                </div>
-
-                                                {{-- Drone Operators --}}
-                                                <div class="col-md-4">
-                                                    <div><strong>Drone Operators:</strong>
-                                                        {{ $day->drone_operators ?? '0' }}</div>
-                                                    @if ($day->drone_operators > 0)
-                                                        @for ($i = 1; $i <= $day->drone_operators; $i++)
-                                                        @php
-                                                        $drone_operators = $projectEmployeeAssignments->where('project_day_id', $day->id)->where('work_type', 3)->pluck('employee_id')->toArray();
-                                                        @endphp
-                                                            {{-- select employee --}}
-                                                            <select name="drone_operators[{{ $day->id }}][]" class="form-select form-select-sm">
-                                                                <option value="">Select Employee</option>
-                                                                @foreach ($employees as $employee)
-                                                                    <option value="{{ $employee->id }}" {{  $employee->id == ($drone_operators[$i-1] ?? null) ? 'selected' : '' }}>
-                                                                        {{ $employee->name }} <small> ( {{ $employee->profession->name }} )</small>
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                        @endfor
-                                                    @endif
-                                                </div>
-                                                {{-- Assistant --}}
                                             </div>
                                         </div>
                                     </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                    </div>
+                @endif
+                {{-- end coverage details --}}
+
+                {{-- Complimantory employee assign --}}
+                @if ($project->projectcomplimentary)
+                    <div class="card">
+                        <div class="card-header p-2 bg-light">
+                            <h5 class="mb-0">Complimentary Employee Assign</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="mb-2">
+                                        <strong>Drone:</strong>
+                                        @if ($project->projectcomplimentary && $project->projectcomplimentary->drones > 0)
+                                            Yes ({{ $project->projectcomplimentary->drones }} drones)
+                                        @else
+                                            No Drone
+                                        @endif
+                                    </div>
+
+                                    @if ($project->projectcomplimentary && $project->projectcomplimentary->pre_wedding)
+                                        <div class="mb-2">
+                                            <strong>Pre-Wedding:</strong> Yes
+                                        </div>
+                                        <div class="mb-2">
+                                            <strong>Pre-Wedding Date:</strong>
+                                            {{ $project->projectcomplimentary->pre_wedding_date ? \Carbon\Carbon::parse($project->projectcomplimentary->pre_wedding_date)->format('d-m-Y') : 'N/A' }}
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+                                                <div class="mb-2">
+                                                    <strong>Photographers:</strong>
+                                                    {{ $project->projectcomplimentary->photographers ?? '0' }}
+
+                                                    @if ($project->projectcomplimentary->photographers > 0)
+                                                        @for ($i = 1; $i <= $project->projectcomplimentary->photographers; $i++)
+                                                            <select name="complimentary_photographers[]"
+                                                                class="form-select form-select-sm">
+                                                                <option value="">Select Employee</option>
+                                                                @foreach ($employees as $employee)
+                                                                    <option value="{{ $employee->id }}"
+                                                                        {{ $employee->id == ($photographers[$i - 1] ?? null) ? 'selected' : '' }}>
+                                                                        {{ $employee->name }} <small> (
+                                                                            {{ $employee->profession->name }} )</small>
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        @endfor
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-2">
+                                                    <strong>Videographers:</strong>
+                                                    {{ $project->projectcomplimentary->videographers ?? '0' }}
+                                                    @if ($project->projectcomplimentary->videographers > 0)
+
+                                                        @for ($i = 1; $i <= $project->projectcomplimentary->videographers; $i++)
+                                                            <select name="complimentary_videographers[]"
+                                                                class="form-select form-select-sm">
+                                                                <option value="">Select Employee</option>
+                                                                @foreach ($employees as $employee)
+                                                                    <option value="{{ $employee->id }}"
+                                                                        {{ $employee->id == ($videographers[$i - 1] ?? null) ? 'selected' : '' }}>
+                                                                        {{ $employee->name }} <small> (
+                                                                            {{ $employee->profession->name }} )</small>
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        @endfor
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="mb-2">
+                                                    <strong>Location:</strong>
+                                                    {{ $project->projectcomplimentary->location ?? 'N/A' }}
+                                                </div>
+                                            </div>
+                                        @else
+                                            <div class="mb-2">
+                                                <strong>Pre-Wedding:</strong> No
+                                            </div>
+                                    @endif
                                 </div>
-                            @endforeach
+                            </div>
                         </div>
                     </div>
+                @endif
+                {{-- end Complimantory employee assign --}}
 
+                {{-- form submit --}}
+                <div class="row">
+                    <div class="col-md-12 text-end">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
                 </div>
-            @endif
-            {{-- end coverage details --}}
-
-            {{-- form submit --}}
-            <div class="row">
-                <div class="col-md-12 text-end">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-            </div>
-        </form>
+            </form>
         @endsection

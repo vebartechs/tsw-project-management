@@ -92,6 +92,41 @@ class ProjectEmployeeAssignmentController extends Controller
             }
         }
 
+
+        // complimentary assignments------------------------
+        if ($request->complimentary_photographers) {
+            foreach ($request->complimentary_photographers as $employee_id) {
+
+              
+                    if ($employee_id == null) {
+                        continue;
+                    }
+                    ProjectEmployeeAssignment::create([
+                        'project_id' => $project_id,
+                        'employee_id' => $employee_id,
+                        'project_complimentary_id' => $project->projectcomplimentary->id,
+                        'work_type' => $photographer_work_type,
+                    ]);
+                
+            }
+        }
+
+        if ($request->complimentary_videographers) {
+            foreach ($request->complimentary_videographers as $employee_id) {
+
+
+                if ($employee_id == null) {
+                    continue;
+                }
+                ProjectEmployeeAssignment::create([
+                    'project_id' => $project_id,
+                    'employee_id' => $employee_id,
+                    'project_complimentary_id' => $project->projectcomplimentary->id,
+                    'work_type' => $videographer_work_type,
+                ]);
+            }
+        }
+
         return redirect()
             ->route('project.show', $project->id)
             ->with('success', 'Employee assigned successfully');

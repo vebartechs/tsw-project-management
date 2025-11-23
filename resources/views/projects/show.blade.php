@@ -122,13 +122,27 @@
                                     <strong>Pre-Wedding:</strong> Yes
                                 </div>
                                 <div class="mb-2">
+                                    <strong>Pre-Wedding Date:</strong> {{$project->projectcomplimentary->pre_wedding_date? \Carbon\Carbon::parse($project->projectcomplimentary->pre_wedding_date)->format('d-m-Y') : 'N/A' }}
+                                </div>
+                                <div class="mb-2">
                                     <strong>Type:</strong> {{ $project->projectcomplimentary->type ?? 'N/A' }}
                                 </div>
                                 <div class="mb-2">
                                     <strong>Photographers:</strong> {{ $project->projectcomplimentary->photographers ?? '0' }}
+                                    @foreach($projectEmployeeAssignments as $projectEmployeeAssignment)
+                                        @if($projectEmployeeAssignment->project_complimentary_id == $project->projectcomplimentary->id && $projectEmployeeAssignment->work_type == 1)
+                                            <div>{{ $projectEmployeeAssignment->employee->name }}</div>
+                                        @endif
+                                    @endforeach
+
                                 </div>
                                 <div class="mb-2">
                                     <strong>Videographers:</strong> {{ $project->projectcomplimentary->videographers ?? '0' }}
+                                    @foreach($projectEmployeeAssignments as $projectEmployeeAssignment)
+                                        @if($projectEmployeeAssignment->project_complimentary_id == $project->projectcomplimentary->id && $projectEmployeeAssignment->work_type == 2)
+                                            <div>{{ $projectEmployeeAssignment->employee->name }}</div>
+                                        @endif
+                                    @endforeach
                                 </div>
                                 <div class="mb-2">
                                     <strong>Location:</strong> {{ $project->projectcomplimentary->location ?? 'N/A' }}
@@ -144,14 +158,22 @@
             </div>
 
             <div class="d-flex justify-content-between">
-                <form action="{{ route('project.destroy', $project->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this project?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Delete Project</button>
-                    
+                <div>
                     <a href="{{ route('project.employee.assign.create', $project->id) }}" class="btn btn-primary">Assign Employee</a>
+                </div>
 
-                </form>
+                <div class="d-flex gap-2">
+
+                    <a href="{{ route('project.create', [$project->customer_id,$project->id]) }}" class="btn btn-warning">Edit Project</a>
+
+                    <form action="{{ route('project.destroy', $project->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this project?');">
+                        @csrf
+                        @method('DELETE')
+                        
+                        <button type="submit" class="btn btn-danger">Delete Project</button>
+                        
+                    </form>
+                </div>
             </div>
         </div>
     </div>
